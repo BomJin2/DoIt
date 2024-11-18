@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 /** 우리가 만든 페이지 컴포넌트 */
 import HomePage from "./views/Home";
 import Bookmark from "./views/Bookmark";
+import { Toaster } from "./components/ui/toaster";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
           <Route path={"/"} element={<HomePage />}></Route>
           <Route path={"/bookmark"} element={<Bookmark />}></Route>
         </Routes>
+        <Toaster />
       </BrowserRouter>
     </>
   );

@@ -1,8 +1,45 @@
 import { Header, Nav, PaginationFooter } from "@/components/common";
 import { ImageCard } from "@/components/common/home";
 import { SearchBar } from "@/components/ui/search-bar";
+import { useToast } from "@/hooks/use-toast";
+import { fetchApi, pageAtom, searchValueAtom } from "@/stores";
+import { ImageCardType } from "@/types";
+import { useAtom } from "jotai";
+import { useCallback, useEffect, useState } from "react";
 
 const HomePage = () => {
+  const [searchValue] = useAtom(searchValueAtom);
+  const [page] = useAtom(pageAtom);
+
+  const [img, setImg] = useState([]);
+  const { toast } = useToast();
+
+  const fetchImages = useCallback(async () => {
+    try {
+      const res = await fetchApi(searchValue, page);
+
+      if (res.status === 200 && res.data) {
+        setImg(res.data.results);
+        toast({
+          title: "API 호출 성공! ",
+          description: "Shadcn UI = Toast test",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Unsplash API 호출 실패",
+          description: "API 호출을 위한 필수 파라미터 값을 체크해보세요",
+        });
+      }
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [searchValue, page]);
+
+  useEffect(() => {
+    fetchImages();
+  }, [fetchImages]);
   return (
     <>
       <div className="page">
@@ -23,12 +60,9 @@ const HomePage = () => {
             </div>
           </div>
           <div className="page__container__contents">
-            <ImageCard />
-            <ImageCard />
-            <ImageCard />
-            <ImageCard />
-            <ImageCard />
-            <ImageCard />
+            {img.map((item: ImageCardType) => {
+              return <ImageCard data={item} />;
+            })}
           </div>
           <PaginationFooter />
         </div>
