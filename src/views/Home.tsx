@@ -3,16 +3,28 @@ import { ImageCard } from "@/components/common/home";
 import { SearchBar } from "@/components/ui/search-bar";
 import { useToast } from "@/hooks/use-toast";
 import { fetchApi, pageAtom, searchValueAtom } from "@/stores";
-import { ImageCardType } from "@/types";
+import { ImageDataType } from "@/types";
 import { useAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 
 const HomePage = () => {
-  const [searchValue] = useAtom(searchValueAtom);
-  const [page] = useAtom(pageAtom);
-
+  const [searchValue, setSearchValue] = useAtom(searchValueAtom);
+  const [page, setPage] = useAtom(pageAtom);
+  const [inputValue, setInputValue] = useState<string>("");
   const [img, setImg] = useState([]);
   const { toast } = useToast();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      // 입력 필드 초기화
+      setInputValue("");
+      setSearchValue(inputValue);
+    }
+  };
 
   const fetchImages = useCallback(async () => {
     try {
@@ -35,7 +47,7 @@ const HomePage = () => {
     } catch (e) {
       console.log(e);
     }
-  }, [searchValue, page]);
+  }, [searchValue, page, toast]);
 
   useEffect(() => {
     fetchImages();
@@ -56,11 +68,16 @@ const HomePage = () => {
                 <h4 className="scroll-m-20 text-md text-white font-semibold tracking-tight">인터넷 시각자료 출처입니다.</h4>
                 <h4 className="scroll-m-20 text-md text-white font-semibold tracking-tight">모든 지역에 있는 크리에이터들의 지원을 받습니다</h4>
               </div>
-              <SearchBar placeholder="원하는 이미지를 검색하세요." />
+              <SearchBar
+                placeholder="원하는 이미지를 검색하세요."
+                onInput={handleChange}
+                value={inputValue}
+                onKeyDown={handleKeyDown} // 엔터 키 이벤트 핸들러
+              />
             </div>
           </div>
           <div className="page__container__contents">
-            {img.map((item: ImageCardType) => {
+            {img.map((item: ImageDataType) => {
               return <ImageCard data={item} />;
             })}
           </div>

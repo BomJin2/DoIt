@@ -7,6 +7,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui";
+import { pageAtom } from "@/stores";
+import { useAtom } from "jotai";
 
 const PaginationFooter = () => {
   return (

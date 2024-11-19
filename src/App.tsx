@@ -4,17 +4,21 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./views/Home";
 import Bookmark from "./views/Bookmark";
 import { Toaster } from "./components/ui/toaster";
+import { Provider } from "jotai";
 
 const App = () => {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path={"/"} element={<HomePage />}></Route>
-          <Route path={"/bookmark"} element={<Bookmark />}></Route>
-        </Routes>
-        <Toaster />
-      </BrowserRouter>
+      <Provider>
+        <BrowserRouter>
+          <Routes>
+            <Route path={"/"} element={<HomePage />}></Route>
+            <Route path="/search/:id" element={<HomePage />}></Route>
+            <Route path={"/bookmark"} element={<Bookmark />}></Route>
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </Provider>
     </>
   );
 };
