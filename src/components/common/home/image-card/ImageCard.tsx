@@ -9,11 +9,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Skeleton,
 } from "@/components/ui";
+import { AlignLeft, ClipboardPenLine, FolderOpen, Heart, Pin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ImageDataType } from "@/types";
-import { AlignLeft, ClipboardPenLine, FolderOpen, Heart, Pin } from "lucide-react";
 
 interface Props {
   data: ImageDataType;
@@ -143,4 +142,5 @@ function ImageCard({ data }: Props) {
     </div>
   );
 }
+
 export { ImageCard };
